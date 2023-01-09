@@ -10,8 +10,7 @@
 
 (def cli-options
   [["-c" "--coordinates COORDINATES" "Coordinates"
-    :parse-fn #(map Integer/parseInt (string/split % #","))
-    :validate [#(and (= 2 (count %)) (every? number? %)) "Coordinates must be two comma-separated numbers."]]
+    :parse-fn (fn [coords] (zipmap [:latitude :longitude] (map #(Double/parseDouble %) (string/split coords #","))))]
    ["-u" "--units UNITS" "Units"
     :default "F"
     :parse-fn string/upper-case
