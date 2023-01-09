@@ -24,12 +24,11 @@
 
 (def unit-conversion {"F" "us" "C" "si"})
 
+(defn get-data-from-nws [url]
+  (get-in (download-and-parse url) [:properties :periods]))
+
 (defn get-hourly-forecast [{:keys [cwa gridX gridY]} units]
-  (->   (str "https://api.weather.gov/gridpoints/" cwa "/" gridX "," gridY "/forecast/hourly?units=" (unit-conversion units))
-        download-and-parse
-        (get-in [:properties :periods])))
+  (get-data-from-nws (str "https://api.weather.gov/gridpoints/" cwa "/" gridX "," gridY "/forecast/hourly?units=" (unit-conversion units))))
 
 (defn get-extended-forecast [{:keys [cwa gridX gridY]} units]
-  (-> (str "https://api.weather.gov/gridpoints/" cwa "/" gridX "," gridY "/forecast?units=" (unit-conversion units))
-      download-and-parse
-      (get-in [:properties :periods])))
+  (get-data-from-nws (str "https://api.weather.gov/gridpoints/" cwa "/" gridX "," gridY "/forecast?units=" (unit-conversion units))))
